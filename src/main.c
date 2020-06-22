@@ -1,14 +1,17 @@
 #include <stdint.h>
 #include <stddef.h>
-#include "irq.h"
 
-#define UART0DR (*(volatile uint32_t *) 0x4000C000)
+#include "irq/irq.h"
+#include "periphs/systick.h"
+#include "periphs/uart.h"
 
 int main()
 {
   enable_irq();
 
-  UART0DR = (uint32_t) 'A';
+  systick_init(0xFFFFF);
+
+  uart0_write("A");
 
   while (1) {}
 
