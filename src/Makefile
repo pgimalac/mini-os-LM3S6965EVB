@@ -20,25 +20,37 @@ FOLDER_PERIPH = periphs/
 OBJS_PERIPH = systick.o uart.o
 
 FOLDER_IRQ = irq/
-OBJS_IRQ = irq.o handlers.o default_handlers.o
+OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o
 
 OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ)) $(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH))
 
 # Cible par défaut
 all: $(EXE) $(IMG)
 
+crt0.o: crt0.s
+	@echo "Assembling main"
+	@$(AS) $(ASFLAGS) -o $@ $?
+
 %.o: %.c
-	$(CC) $(LDFLAGS) -I. -c $? -o $@ $(CFLAGS)
+	@echo "Compiling $?"
+	@$(CC) $(LDFLAGS) -I. -c $? -o $@ $(CFLAGS)
 
 # Règles spécifiques à nous
 $(EXE): $(OBJS) ld_ram.lds
-	$(CC) $(LDFLAGS) -I. $(OBJS) $(LDLIBS) -o$@
+	@echo "Build main"
+	@$(CC) $(LDFLAGS) -I. $(OBJS) $(LDLIBS) -o$@
 
 $(IMG): $(EXE)
-	$(OBJCOPY) -O binary $< $@
+	@echo "Converting main to binary"
+	@$(OBJCOPY) -O binary $< $@
 
 clean:
-	-rm -f $(OBJS) $(EXE) $(EXE).lst $(EXE).map $(IMG) *~
+	@echo "Clean objects"
+	@rm -f $(OBJS) $(EXE) $(EXE).lst $(EXE).map $(IMG) *~
 
 run: all
-	qemu-system-arm -M lm3s6965evb -nographic -kernel main.bin
+	@qemu-system-arm -M lm3s6965evb -nographic -kernel main.bin
+
+re: clean all
+
+rerun: re run
