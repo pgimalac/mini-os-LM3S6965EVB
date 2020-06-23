@@ -29,6 +29,8 @@ int new_task(task_func_t f, void *arg) {
 
     process_t *proc = proc_table + proc_num;
     proc->pid = new_pid++;
-
-    //TODO
+    
+    
 }
+
+
