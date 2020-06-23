@@ -19,8 +19,14 @@ MAKE_DEFAULT_HANDLER(BusFault_Handler)
 MAKE_DEFAULT_HANDLER(UsageFault_Handler)
 MAKE_DEFAULT_HANDLER(SVC_Handler)
 MAKE_DEFAULT_HANDLER(DebugMonitor_Handler)
-MAKE_DEFAULT_HANDLER(PendSV_Handler)
-MAKE_DEFAULT_HANDLER(SysTick_Handler)
+//MAKE_DEFAULT_HANDLER(PendSV_Handler)
+void PendSV_Handler(void){
+
+}
+//MAKE_DEFAULT_HANDLER(SysTick_Handler)
+void SysTick_Handler(void){
+    
+}
 
 MAKE_DEFAULT_HANDLER(GPIOA_IRQHandler)
 MAKE_DEFAULT_HANDLER(GPIOB_IRQHandler)
