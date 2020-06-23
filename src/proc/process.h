@@ -37,7 +37,7 @@ typedef struct {
     uint32_t pc;
     uint32_t xpsr;
 
-    } hw_context ;
+} hw_context ;
 
 typedef struct  {
     uint32_t v1;
@@ -48,7 +48,7 @@ typedef struct  {
     uint32_t v6;
     uint32_t v7;
     uint32_t v8;
-    } sw_context ;
+} sw_context ;
 
 
 extern process_t proc_table[PROC_MAX_NUM];
