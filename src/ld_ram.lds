@@ -11,7 +11,7 @@ SECTIONS
     .vect_table :
     {
         _irq_table = . ;
-        irq.o(*vectors*)
+        irq/irq.o(*vectors*)
     } >flash
 
     .text :
