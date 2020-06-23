@@ -33,7 +33,6 @@ typedef struct {
     uint32_t r2;
     uint32_t r3;
     uint32_t ip;
-    uint32_t sp;
     uint32_t lr;
     uint32_t pc;
     uint32_t xpsr;
