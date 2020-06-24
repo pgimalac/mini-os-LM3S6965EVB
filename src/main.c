@@ -4,16 +4,16 @@
 #include "irq/irq.h"
 #include "periphs/systick.h"
 #include "periphs/uart.h"
+#include "proc/process.h"
 
-int main()
-{
-  enable_irq();
+int main() {
+    uart0_write("Main started.");
 
-  systick_init(0xFFFFF);
+    enable_irq();
+    init_proc_table();
+    systick_init(0xFFFFF);
 
-  uart0_write("A");
+    while (1) {}
 
-  while (1) {}
-
-  return 0;
+    return 0;
 }

@@ -23,7 +23,7 @@ FOLDER_IRQ = irq/
 OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o
 
 FOLDER_PROC = proc/
-OBJS_PROC = process.o
+OBJS_PROC = process.o scheduler.o
 
 OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ)) \
 								$(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH)) \

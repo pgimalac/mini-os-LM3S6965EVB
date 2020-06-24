@@ -13,22 +13,38 @@
 
 typedef void *(*task_func_t)(void *);
 
-typedef struct __attribute__((packed, aligned(4))) {
-
+typedef struct {
+    uint32_t r0;
+    uint32_t r1;
+    uint32_t r2;
+    uint32_t r3;
+    uint32_t r12;
+    uint32_t lr;
+    uint32_t pc;
+    uint32_t xpsr;
 } context_proc;
 
-typedef struct __attribute__((packed, aligned(4))) {
-
+typedef struct {
+    uint32_t r4;
+    uint32_t r5;
+    uint32_t r6;
+    uint32_t r7;
+    uint32_t r8;
+    uint32_t r9;
+    uint32_t r10;
+    uint32_t r11;
 } context_soft;
 
 typedef struct {
+    uint32_t sp;
     uint32_t flags;
     uint32_t pid;
-    char stack[STACK_SIZE];
+    uint8_t stack[STACK_SIZE];
 } process_t;
 
 extern process_t proc_table[PROC_MAX_NUM];
-extern int current_proc;
+extern process_t *current_proc;
+extern process_t *next_proc;
 
 void init_proc_table();
 
