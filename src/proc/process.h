@@ -35,36 +35,15 @@ typedef struct {
     uint32_t r11;
 } context_soft;
 
+
+// https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/6199b72fbf57a7c5b3d7b195a3bd1446779314cd/tasks.c
+// tskTaskControlBlock
 typedef struct {
-    uint32_t sp;
+    volatile uint32_t *sp;
     uint32_t flags;
     uint32_t pid;
     uint8_t stack[STACK_SIZE];
 } process_t;
-
-typedef struct {
-    uint32_t r0;
-    uint32_t r1;
-    uint32_t r2;
-    uint32_t r3;
-    uint32_t ip;
-    uint32_t lr;
-    uint32_t pc;
-    uint32_t xpsr;
-
-} hw_context ;
-
-typedef struct  {
-    uint32_t v1;
-    uint32_t v2;
-    uint32_t v3;
-    uint32_t v4;
-    uint32_t v5;
-    uint32_t v6;
-    uint32_t v7;
-    uint32_t v8;
-} sw_context ;
-
 
 extern process_t proc_table[PROC_MAX_NUM];
 extern process_t *current_proc;

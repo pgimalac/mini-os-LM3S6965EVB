@@ -60,9 +60,9 @@ int new_task(task_func_t f, void *arg) {
     cts-> r10 = 0;
     cts-> r11 = 0;
 
-    proc->sp    = (uint32_t) (proc-> stack + STACK_SIZE - sizeof(context_proc) - sizeof(context_soft));
+    proc->sp    = (uint32_t *) (proc-> stack + STACK_SIZE - sizeof(context_proc) - sizeof(context_soft));
 
-    proc->flags = 0b11; //TODO détailler
+    proc->flags = 1; //TODO détailler
 
     return 0;
 }
