@@ -15,10 +15,11 @@ int next_proc_pid = 0;
 void *task(void *arg) {
     char buff[2];
     buff[1] = 0;
+    // buff[1] = '\n';
     buff[0] = (uint32_t)arg;
     while (1) {
         uart0_write(buff);
-        for (int i = 0; i < 10000; i++){}
+        for (int i = 0; i < 5000000; i++){}
     }
 }
 
@@ -29,6 +30,9 @@ void init_proc_table() {
 
     new_task(task, (void *) 'A');
     new_task(task, (void *) 'B');
+    new_task(task, (void *) 'C');
+    new_task(task, (void *) 'D');
+    new_task(task, (void *) 'E');
 }
 
 int new_task(task_func_t f, void *arg) {
@@ -40,7 +44,7 @@ int new_task(task_func_t f, void *arg) {
     proc->pid = next_proc_pid;
     next_proc_pid++;
 
-    context_proc *ctp = (context_proc *) (proc->stack + STACK_SIZE);
+    context_proc *ctp = (context_proc *) (proc->stack + STACK_SIZE - sizeof(context_proc));
     ctp->r0   = (uint32_t) arg;
     ctp->r1   = 0;
     ctp->r2   = 0;
@@ -50,7 +54,7 @@ int new_task(task_func_t f, void *arg) {
     ctp->pc   = (uint32_t) f;
     ctp->xpsr = 0x21000000;
 
-    context_soft *cts = (context_soft *) (proc-> stack + STACK_SIZE - sizeof(context_proc));
+    context_soft *cts = (context_soft *) (proc-> stack + STACK_SIZE - sizeof(context_proc) - sizeof(context_soft));
     cts-> r4  = 0;
     cts-> r5  = 0;
     cts-> r6  = 0;

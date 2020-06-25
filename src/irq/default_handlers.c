@@ -4,7 +4,8 @@
 
 #define MAKE_DEFAULT_HANDLER(x) void __attribute__((weak)) x(void) {  \
     disable_irq();                                                    \
-    uart0_write("default handler\n");                                 \
+    uart0_write(#x);                                                  \
+    uart0_write(" default\n");                                        \
     while(1);                                                         \
 }
 

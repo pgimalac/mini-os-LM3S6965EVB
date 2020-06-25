@@ -7,13 +7,13 @@
 #include "proc/process.h"
 
 int main() {
-    uart0_write("Main started.");
+    uart0_write("Main started.\n");
 
     enable_irq();
     init_proc_table();
-    systick_init(0xFFFFF);
+    systick_init(0x6FFFFF);
 
     while (1) {}
 
-    return 0;
+        return 0;
 }

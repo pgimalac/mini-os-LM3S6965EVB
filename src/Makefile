@@ -3,6 +3,7 @@ CROSSCOMPILE=arm-none-eabi-
 LD = $(CROSSCOMPILE)ld
 AS = $(CROSSCOMPILE)as
 CC = $(CROSSCOMPILE)gcc
+DB = $(CROSSCOMPILE)gdb
 OBJCOPY = $(CROSSCOMPILE)objcopy
 
 # Définition des flags de compilation pour le compilateur C et l'assembleur
@@ -20,7 +21,7 @@ FOLDER_PERIPH = periphs/
 OBJS_PERIPH = systick.o uart.o
 
 FOLDER_IRQ = irq/
-OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o
+OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o pendsvhandler.o
 
 FOLDER_PROC = proc/
 OBJS_PROC = process.o scheduler.o
@@ -35,6 +36,10 @@ crt0.o: crt0.s
 	@echo "Assembling main"
 	@$(AS) $(ASFLAGS) -o $@ $?
 
+irq/pendsvhandler.o: irq/pendsvhandler.s
+	@echo "Assembling pendsvhandler"
+	@$(AS) $(ASFLAGS) -o $@ $?
+
 %.o: %.c
 	@echo "Compiling $?"
 	@$(CC) $(LDFLAGS) $(CFLAGS) -c $? -o $@
@@ -42,7 +47,7 @@ crt0.o: crt0.s
 # Règles spécifiques à nous
 $(EXE): $(OBJS) ld_ram.lds
 	@echo "Build main"
-	@$(CC) $(LDFLAGS) $(OBJS) $(LDLIBS) -o$@
+	@$(CC) $(LDFLAGS) -g $(OBJS) $(LDLIBS) -o$@
 
 $(IMG): $(EXE)
 	@echo "Converting main to binary"
@@ -53,7 +58,7 @@ clean:
 	@rm -f $(OBJS) $(EXE) $(EXE).lst $(EXE).map $(IMG) *~
 
 run: all
-	@qemu-system-arm -M lm3s6965evb -nographic -kernel main.bin
+	@qemu-system-arm -M lm3s6965evb -nographic -kernel $(IMG)
 
 re: clean all
 
