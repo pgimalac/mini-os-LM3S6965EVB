@@ -42,7 +42,7 @@ irq/pendsvhandler.o: irq/pendsvhandler.s
 
 %.o: %.c
 	@echo "Compiling $?"
-	@$(CC) $(LDFLAGS) $(CFLAGS) -c $? -o $@
+	@$(CC) $(LDFLAGS) $(CFLAGS) $(LDLIBS) -c $? -o $@
 
 # Règles spécifiques à nous
 $(EXE): $(OBJS) ld_ram.lds

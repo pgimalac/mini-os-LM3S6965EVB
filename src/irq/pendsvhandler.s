@@ -8,7 +8,6 @@
 
 .thumb_func
 PendSV_Handler:
-
     mrs r0, psp
     ldr r3, =current_proc         // Get the location of the current process.
     isb

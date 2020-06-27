@@ -42,6 +42,7 @@ typedef struct {
     volatile uint32_t *sp;
     uint32_t flags;
     uint32_t pid;
+    uint32_t padding;
     uint8_t stack[STACK_SIZE];
 } process_t;
 

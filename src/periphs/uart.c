@@ -2,6 +2,14 @@
 
 #include <stdint.h>
 
+void uart0_write_int(int arg) {
+    while (arg != 0) {
+        UART0_ADDR = (arg % 10) + '0';
+        arg /= 10;
+    }
+    UART0_ADDR = '\n';
+}
+
 int uart0_write(char *txt) {
     char *ptr;
 
