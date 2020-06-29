@@ -4,6 +4,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 process_t proc_table[PROC_MAX_NUM];
 volatile uint8_t proc_stacks[PROC_MAX_NUM][STACK_SIZE];
@@ -27,7 +28,7 @@ void *task(void *arg) {
 uint32_t free_pid[PROC_MAX_NUM];
 
 // the number of free pids
-uint32_t free_pid_index = 0;
+uint32_t free_pid_number = 0;
 
 void init_proc_table() {
     for (int proc_num = 0; proc_num < PROC_MAX_NUM; proc_num++) {
@@ -39,7 +40,7 @@ void init_proc_table() {
     }
 
     for (int proc_num = PROC_MAX_NUM - 1; proc_num >= 0; proc_num--) {
-        free_pid[free_pid_index++] = proc_num;
+        free_pid[free_pid_number++] = proc_num;
     }
 
     new_task(task, "A");
@@ -50,11 +51,11 @@ void init_proc_table() {
 }
 
 int new_task(task_func_t f, void *arg) {
-    if (free_pid_index == 0) {
+    if (free_pid_number == 0) {
         return -1;
     }
 
-    uint32_t pid = free_pid[--free_pid_index];
+    uint32_t pid = free_pid[--free_pid_number];
     process_t *proc = &proc_table[pid];
 
     context_proc *ctp = (context_proc *) ((uint8_t*)proc->stack_start - sizeof(context_proc));
@@ -84,3 +85,16 @@ int new_task(task_func_t f, void *arg) {
     return 0;
 }
 
+int sys_fork() {
+    if (current_proc == NULL || free_pid_number == 0) {
+        return -1;
+    }
+
+    uint32_t pid = free_pid[--free_pid_number];
+    process_t *proc = &proc_table[pid];
+
+    proc->sp = proc->stack_start - current_proc->stack_start + current_proc->sp;
+    memcpy((void *)proc->sp, (void *)current_proc->sp, current_proc->stack_start - current_proc->sp);
+
+    return 0; // TODO
+}

@@ -56,4 +56,6 @@ void init_proc_table();
 
 int new_task(task_func_t f, void *arg);
 
+int sys_fork();
+
 #endif
