@@ -1,9 +1,12 @@
 #ifndef SYSCALLS_H
 #define SYSCALLS_H
 
+
 // 0   sys_setup
 // 1   sys_exit
+void sys_exit(int status);
 // 2   sys_fork
+int sys_fork();
 // 3   sys_read
 // 4   sys_write
 // 5   sys_open

@@ -36,12 +36,8 @@ OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ)) \
 # Cible par défaut
 all: $(EXE) $(IMG)
 
-crt0.o: crt0.s
-	@echo "Assembling main"
-	@$(AS) $(ASFLAGS) -o $@ $?
-
-irq/pendsvhandler.o: irq/pendsvhandler.s
-	@echo "Assembling pendsvhandler"
+%.o: %.s
+	@echo "Assembling $?"
 	@$(AS) $(ASFLAGS) -o $@ $?
 
 %.o: %.c
