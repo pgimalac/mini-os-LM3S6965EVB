@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #include "handlers.h"
 #include "icsr.h"

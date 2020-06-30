@@ -1,10 +1,14 @@
 #include "process.h"
 #include "irq/irq.h"
 #include "periphs/uart.h"
+#include "irq/icsr.h"
 
+#include <sys/types.h>
+#include <unistd.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdlib.h>
 
 process_t proc_table[PROC_MAX_NUM];
 volatile uint8_t proc_stacks[PROC_MAX_NUM][STACK_SIZE];
@@ -14,14 +18,23 @@ process_t *next_proc = NULL;
 
 void *task(void *arg) {
     uart0_write("TASK_BEGIN\n");
-    while (1) {
-        uart0_write(arg);
-        for (int i = 0; i <= 5000000; i++){
-            // if (i % 2000000 == 0) {
-            //     uart0_write_int(i);
-            // }
-        }
+
+    int ret = fork();
+    if (ret == -1) {
+        uart0_write("returned -1\n");
+    } else if (ret == 0) {
+        uart0_write("returned 0\n");
+    } else {
+        uart0_write("returned >0\n");
+        uart0_write_int(ret);
     }
+
+    for (int j = 0; j < 50; j++) {
+        uart0_write(arg);
+        for (int i = 0; i <= 5000000; i++){}
+    }
+
+    exit(0);
 }
 
 // contains the 'free' pids
@@ -97,4 +110,24 @@ int sys_fork() {
     memcpy((void *)proc->sp, (void *)current_proc->sp, current_proc->stack_start - current_proc->sp);
 
     return 0; // TODO
+}
+
+// add __attribute__((noreturn)) ?
+void sys_exit(int status) {
+    if (current_proc == NULL) {
+        return;
+    }
+
+    free_pid[free_pid_number++] = current_proc->pid;
+    current_proc->flags = 0;
+    current_proc->sp = current_proc->stack_start;
+
+    current_proc = NULL;
+
+    uart0_write("sys_exit");
+
+    uart0_write_int(status);
+    while (1);
+
+    trigger_pendsv();
 }

@@ -1,19 +1,17 @@
-#include <syscalls/syscalls.h>
 .thumb
 .syntax unified
 .cpu cortex-m3
 
-.macro mksc name sysc num
 
-.extern \sysc
-.global \name
-
+.global exit
 .thumb_func
-\name :
-    svc \num
+exit:
+    svc 0
     bx r14
 
-.endm
 
-mksc exit SYS_EXIT 1
-mksc fork SYS_FORK 2
+.global fork
+.thumb_func
+fork:
+    svc 1
+    bx r14

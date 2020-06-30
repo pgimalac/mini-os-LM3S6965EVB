@@ -21,18 +21,23 @@ FOLDER_PERIPH = periphs/
 OBJS_PERIPH = systick.o uart.o
 
 FOLDER_IRQ = irq/
-OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o pendsvhandler.o svc_handler.o
+OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o pendsv_handler.o svc_handler.o
 
 FOLDER_PROC = proc/
 OBJS_PROC = process.o scheduler.o
 
 FOLDER_STDLIB = libc/
-OBJS_STDLIB = string.o
+OBJS_STDLIB = string.o sys.o
 
-OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ)) \
-								$(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH)) \
-								$(addprefix $(FOLDER_PROC), $(OBJS_PROC)) \
-								$(addprefix $(FOLDER_STDLIB), $(OBJS_STDLIB))
+FOLDER_SYSCALLS = syscalls/
+OBJS_SYSCALLS = syscalls.o
+
+OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ))       	  \
+								$(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH)) 	  \
+								$(addprefix $(FOLDER_PROC), $(OBJS_PROC))     	  \
+								$(addprefix $(FOLDER_STDLIB), $(OBJS_STDLIB)) 	  \
+								$(addprefix $(FOLDER_SYSCALLS), $(OBJS_SYSCALLS))
+
 # Cible par défaut
 all: $(EXE) $(IMG)
 
