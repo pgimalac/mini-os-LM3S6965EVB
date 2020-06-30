@@ -47,12 +47,12 @@ all: $(EXE) $(IMG)
 
 %.o: %.c
 	@echo "Compiling $?"
-	@$(CC) $(LDFLAGS) $(CFLAGS) $(LDLIBS) -c $? -o $@
+	@$(CC) $(LDFLAGS) $(CFLAGS) -c $? -o $@ $(LDLIBS)
 
 # Règles spécifiques à nous
 $(EXE): $(OBJS) ld_ram.lds
 	@echo "Build main"
-	@$(CC) $(LDFLAGS) -g $(OBJS) $(LDLIBS) -o$@
+	@$(CC) $(LDFLAGS) $(OBJS) -o $@ $(LDLIBS)
 
 $(IMG): $(EXE)
 	@echo "Converting main to binary"

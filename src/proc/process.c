@@ -2,6 +2,7 @@
 #include "irq/irq.h"
 #include "periphs/uart.h"
 #include "irq/icsr.h"
+#include "scheduler.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -19,7 +20,7 @@ process_t *next_proc = NULL;
 void *task(void *arg) {
     uart0_write("TASK_BEGIN\n");
 
-    int ret = fork();
+    int ret = 0;//fork();
     if (ret == -1) {
         uart0_write("returned -1\n");
     } else if (ret == 0) {
@@ -29,12 +30,24 @@ void *task(void *arg) {
         uart0_write_int(ret);
     }
 
-    for (int j = 0; j < 50; j++) {
-        uart0_write(arg);
-        for (int i = 0; i <= 5000000; i++){}
+    while (1) {
+        for (int j = 0; j < 50; j++) {
+            uart0_write(arg);
+            for (int i = 0; i <= 5000000; i++){}
+        }
     }
 
     exit(0);
+}
+
+void *init() {
+    new_task(task, "A");
+    new_task(task, "B");
+    new_task(task, "C");
+    new_task(task, "D");
+    new_task(task, "E");
+
+    while (1);
 }
 
 // contains the 'free' pids
@@ -56,11 +69,7 @@ void init_proc_table() {
         free_pid[free_pid_number++] = proc_num;
     }
 
-    new_task(task, "A");
-    new_task(task, "B");
-    new_task(task, "C");
-    new_task(task, "D");
-    new_task(task, "E");
+    new_task(init, NULL);
 }
 
 int new_task(task_func_t f, void *arg) {
@@ -91,9 +100,9 @@ int new_task(task_func_t f, void *arg) {
     cts-> r10 = 0;
     cts-> r11 = 0;
 
-    proc->sp    = (void *) cts;
+    proc->sp       = (void *) cts;
 
-    proc->flags = 1; //TODO détailler
+    proc->flags = PROCESS_FLAGS_EXISTS;
 
     return 0;
 }
@@ -125,9 +134,7 @@ void sys_exit(int status) {
     current_proc = NULL;
 
     uart0_write("sys_exit");
-
     uart0_write_int(status);
-    while (1);
 
     trigger_pendsv();
 }

@@ -12,6 +12,8 @@
     #define STACK_SIZE 1024
 #endif
 
+#define PROCESS_FLAGS_EXISTS   1
+
 typedef void *(*task_func_t)(void *);
 
 typedef struct {
@@ -54,6 +56,6 @@ extern process_t *next_proc;
 
 void init_proc_table();
 
-int new_task(task_func_t f, void *arg);
+int new_task(task_func_t, void *);
 
 #endif

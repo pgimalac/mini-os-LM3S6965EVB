@@ -20,4 +20,6 @@
 #define SYSTICK_RELOAD_MASK 0xFFFFFF
 void systick_init(uint32_t);
 
+extern uint32_t systick_tick;
+
 #endif

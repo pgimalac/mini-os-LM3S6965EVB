@@ -8,9 +8,12 @@
 #include "proc/process.h"
 #include "irq.h"
 #include "proc/scheduler.h"
+#include "periphs/systick.h"
 
 void SysTick_Handler() {
     uart0_write("SysTick_Handler\n");
+    systick_tick++;
+
     schedule();
     trigger_pendsv();
 }
