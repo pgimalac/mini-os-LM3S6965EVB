@@ -14,7 +14,7 @@
 
 #define PROCESS_FLAGS_EXISTS   1
 
-typedef void *(*task_func_t)(void *);
+typedef int (*task_func_t)(void *);
 
 typedef struct {
     void *r0;

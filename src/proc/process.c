@@ -17,7 +17,7 @@ volatile uint8_t proc_stacks[PROC_MAX_NUM][STACK_SIZE];
 process_t *current_proc = NULL;
 process_t *next_proc = NULL;
 
-void *task(void *arg) {
+int task(void *arg) {
     uart0_write("TASK_BEGIN\n");
 
     uint32_t pid = getpid();
@@ -39,10 +39,10 @@ void *task(void *arg) {
         for (int i = 0; i <= 10000000; i++){}
     }
 
-    exit(0);
+    return 0;
 }
 
-void *init() {
+int init() {
     new_task(task, "A");
     new_task(task, "B");
     new_task(task, "C");
@@ -74,6 +74,10 @@ void init_proc_table() {
     new_task(init, NULL);
 }
 
+void task_cleaner(task_func_t f, void *arg) {
+    exit(f(arg));
+}
+
 int new_task(task_func_t f, void *arg) {
     if (free_pid_number == 0) {
         return -1;
@@ -83,13 +87,13 @@ int new_task(task_func_t f, void *arg) {
     process_t *proc = &proc_table[pid];
 
     context_proc *ctp = (context_proc *) ((uint8_t*)proc->stack_start - sizeof(context_proc));
-    ctp->r0   = arg;
-    ctp->r1   = 0;
+    ctp->r0   = f;
+    ctp->r1   = arg;
     ctp->r2   = 0;
     ctp->r3   = 0;
     ctp->r12  = 0;
-    ctp->lr   = (void *)0xFFFFFFFD;
-    ctp->pc   = f;
+    ctp->lr   = 0;
+    ctp->pc   = task_cleaner;
     ctp->xpsr = (void *)0x21000000;
 
     context_soft *cts = (context_soft *) ((uint8_t*)ctp - sizeof(context_soft));
