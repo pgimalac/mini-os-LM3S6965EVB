@@ -32,10 +32,14 @@ OBJS_STDLIB = string.o sys.o
 FOLDER_SYSCALLS = syscalls/
 OBJS_SYSCALLS = syscalls.o
 
-OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ))       	  \
-								$(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH)) 	  \
-								$(addprefix $(FOLDER_PROC), $(OBJS_PROC))     	  \
-								$(addprefix $(FOLDER_STDLIB), $(OBJS_STDLIB)) 	  \
+FOLDER_FILESYSTEM = filesystem/
+OBJS_FILESYSTEM = filesystem.o
+
+OBJS = main.o crt0.o init_bss.o $(addprefix $(FOLDER_IRQ), $(OBJS_IRQ))       	          \
+								$(addprefix $(FOLDER_PERIPH), $(OBJS_PERIPH)) 	          \
+								$(addprefix $(FOLDER_PROC), $(OBJS_PROC))     	          \
+								$(addprefix $(FOLDER_STDLIB), $(OBJS_STDLIB)) 	          \
+								$(addprefix $(FOLDER_FILESYSTEM), $(OBJS_FILESYSTEM)) 	  \
 								$(addprefix $(FOLDER_SYSCALLS), $(OBJS_SYSCALLS))
 
 # Cible par défaut
