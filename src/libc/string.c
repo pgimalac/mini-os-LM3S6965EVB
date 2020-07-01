@@ -13,7 +13,7 @@ void *memmove(void *dest, const void *src, size_t n) {
 
 void *memcpy(void *dest, const void *src, size_t n) {
     while (n > 0) {
-        *(uint8_t *)dest = *(uint8_t *)src;
+        *(uint8_t *)dest++ = *(uint8_t *)src++;
         n--;
     }
 
@@ -23,7 +23,7 @@ void *memcpy(void *dest, const void *src, size_t n) {
 
 void *memset(void *s, int c, size_t n) {
     while (n > 0) {
-        *(uint8_t *)s = (uint8_t)c;
+        *(uint8_t *)s++ = (uint8_t)c;
         n--;
     }
 
