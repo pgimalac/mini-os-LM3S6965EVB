@@ -16,6 +16,7 @@
 void fs_init();
 void restaure_fs_from_disk();
 void fs_clear();
+int fs_get_inode(char *name);
 
 int fs_create(char *name);
 uint32_t fs_append(int inode, char *txt, uint32_t size);

@@ -10,6 +10,17 @@ void fs_init() {
     restaure_fs_from_disk();
 }
 
+int fs_get_inode(char *name) {
+    for (uint32_t i = 0; i < MAX_FILE_NUMBER; i++) {
+        if (ilist[i].inode_num & FS_INODE_USED &&
+            strcmp(ilist[i].name, name) == 0) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 int find_block() {
     for (int i = 0; i < BLOCK_NUM; i++) {
         if (!(bitset_blocks[i / 8] & (1 << (i % 8)))) {
@@ -170,4 +181,7 @@ void restaure_fs_from_disk() {
     fs_clear();
 
     // write calls to functions above to generate the "initial" disk state
+    fs_create("doc");
+    fs_create("doc");
+    fs_create("doc");
 }
