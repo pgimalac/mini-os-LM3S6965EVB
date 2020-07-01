@@ -20,15 +20,19 @@ process_t *next_proc = NULL;
 void *task(void *arg) {
     uart0_write("TASK_BEGIN\n");
 
-    int ret = fork();
-    if (ret == -1) {
-        uart0_write("returned -1\n");
-    } else if (ret == 0) {
-        uart0_write("returned 0\n");
-    } else {
-        uart0_write("returned >0\n");
-        uart0_write_int(ret);
-    }
+    uint32_t pid = getpid();
+    uart0_write("my pid is ");
+    uart0_write_int(pid);
+
+    // int ret = fork();
+    // if (ret == -1) {
+    //     uart0_write("returned -1\n");
+    // } else if (ret == 0) {
+    //     uart0_write("returned 0\n");
+    // } else {
+    //     uart0_write("returned >0\n");
+    //     uart0_write_int(ret);
+    // }
 
     for (int j = 0; j < 50; j++) {
         uart0_write(arg);

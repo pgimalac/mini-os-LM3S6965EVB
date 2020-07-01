@@ -15,3 +15,9 @@ exit:
 fork:
     svc 1
     bx r14
+
+.global getpid
+.thumb_func
+getpid:
+    svc 2
+    bx r14

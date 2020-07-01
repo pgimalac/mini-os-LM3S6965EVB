@@ -10,5 +10,6 @@ extern void *syscalls[];
 
 void sys_exit(int status);
 uint32_t sys_fork();
+uint32_t sys_getpid();
 
 #endif
