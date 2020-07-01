@@ -3,6 +3,10 @@
 #include <stdint.h>
 
 void uart0_write_int(int arg) {
+    if (arg == 0) {
+        UART0_ADDR = '0';
+    }
+
     while (arg != 0) {
         UART0_ADDR = (arg % 10) + '0';
         arg /= 10;

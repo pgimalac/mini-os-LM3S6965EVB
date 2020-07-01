@@ -20,7 +20,7 @@ process_t *next_proc = NULL;
 void *task(void *arg) {
     uart0_write("TASK_BEGIN\n");
 
-    int ret = 0;//fork();
+    int ret = fork();
     if (ret == -1) {
         uart0_write("returned -1\n");
     } else if (ret == 0) {
@@ -30,11 +30,9 @@ void *task(void *arg) {
         uart0_write_int(ret);
     }
 
-    while (1) {
-        for (int j = 0; j < 50; j++) {
-            uart0_write(arg);
-            for (int i = 0; i <= 5000000; i++){}
-        }
+    for (int j = 0; j < 50; j++) {
+        uart0_write(arg);
+        for (int i = 0; i <= 10000000; i++){}
     }
 
     exit(0);
@@ -107,7 +105,9 @@ int new_task(task_func_t f, void *arg) {
     return 0;
 }
 
-int sys_fork() {
+extern void sys_fork_save_sp(void);
+
+uint32_t sys_fork() {
     if (current_proc == NULL || free_pid_number == 0) {
         return -1;
     }
@@ -115,10 +115,13 @@ int sys_fork() {
     uint32_t pid = free_pid[--free_pid_number];
     process_t *proc = &proc_table[pid];
 
+    sys_fork_save_sp();
+
     proc->sp = proc->stack_start - current_proc->stack_start + current_proc->sp;
     memcpy((void *)proc->sp, (void *)current_proc->sp, current_proc->stack_start - current_proc->sp);
+    proc->flags = current_proc->flags;
 
-    return 0; // TODO
+    return pid;
 }
 
 // add __attribute__((noreturn)) ?
@@ -133,8 +136,10 @@ void sys_exit(int status) {
 
     current_proc = NULL;
 
-    uart0_write("sys_exit");
+    uart0_write("sys_exit ");
     uart0_write_int(status);
+
+    schedule();
 
     trigger_pendsv();
 }
