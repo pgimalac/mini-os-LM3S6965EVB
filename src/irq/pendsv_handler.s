@@ -33,6 +33,13 @@ PendSV_Handler:
     ldr r2, [r2]
     str r2, [r3]
 
+    // those three lines are supposed to enable unprivileged thread mode
+    // not very sure it works
+
+    //mrs r0, CONTROL
+    //orr r0, #1
+    //msr CONTROL, r0
+
     ldr pc, =0xFFFFFFFD
 
     bx r14
