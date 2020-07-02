@@ -1,7 +1,6 @@
 *.o
 *.bin
 main
-*.pdf
 *.png
 *.jpg
 *.svg

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang=""><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Initialisation</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="Initialisation_fichiers/github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <meta name="author" content="Guillaume Duc guillaume.duc@telecom-paris.fr">
+
+  <!--
+  <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <style type="text/css">
+    code {font-family: 'Inconsolata', monospace;}
+    pre {font-size: 120%;}
+  </style>
+  -->
+</head>
+<body>
+<table style="border-width:0">
+  <tbody><tr>
+    <td>
+      <img src="Initialisation_fichiers/logo_tp_ipp.png" height="100">
+    </td>
+    <td>
+      <h1>Projet PAF : Développement d'un petit système d'exploitation</h1>
+    </td>
+  </tr>
+</tbody></table>
+
+<hr>
+<header id="title-block-header">
+<h1 class="title">Initialisation</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#récupération-du-dépôt">Récupération du dépôt</a></li>
+<li><a href="#code-dinitialisation">Code d’initialisation</a></li>
+<li><a href="#compilation-exécution">Compilation &amp; Exécution</a></li>
+<li><a href="#compréhension-du-code">Compréhension du code</a></li>
+</ul>
+</nav>
+<p>La première étape avant toute chose est d’être capable de démarrer et
+ d’initialiser correctement la plate-forme (qu’elle soit virtuelle comme
+ QEMU ou physique) et d’être capable d’y exécuter correctement du code. 
+C’est l’objectif de cette première étape.</p>
+<h1 id="récupération-du-dépôt">Récupération du dépôt</h1>
+<p>Commencez par cloner votre dépôt git. Demandez à votre encadrant de le créer, si ce n’est pas déjà fait.</p>
+<h1 id="code-dinitialisation">Code d’initialisation</h1>
+<p>Le dépôt est déjà rempli avec un premier squelette de programme en C (dans le répertoire <code>src</code>)
+ qui se contente de faire l’initialisation de la plate-forme, la mise en
+ place d’un environnement d’exécution C et d’afficher un petit message 
+pour vérifier que tout va bien.</p>
+<p>Ce code a été écrit pour vous car il fait appel à de nombreuses 
+notions qui sont étudiées en SE203 et donc que vous n’avez pas encore 
+vues. Néanmoins, un peu plus bas, il vous sera demandé d’essayer de le 
+comprendre, au moins dans ses grandes lignes (pas de panique, votre 
+encadrant est là).</p>
+<p>Vous constaterez également que la partie initialisation de la 
+plate-forme est très réduite, QEMU étant relativement laxiste sur ce 
+point. Si vous désirez exécuter ce code sur une vraie carte physique, 
+plusieurs choses seraient à rajouter (notamment configuration de l’arbre
+ d’horloges, configuration propre de l’UART, etc.).</p>
+<h1 id="compilation-exécution">Compilation &amp; Exécution</h1>
+<p>Une fois le code récupéré, commencez par le compiler :</p>
+<pre><code>$ make</code></pre>
+<p>Si tout s’est bien passé et qu’il n’y a pas de message d’erreur, vous devriez vous retrouver avec un fichier <code>main.bin</code> qui contient une image mémoire prête à être exécutée sur la plate-forme virtuelle.</p>
+<p>Nous allons donc maintenant lancer QEMU :</p>
+<pre><code>$ qemu-system-arm -M lm3s6965evb -nographic -kernel main.bin</code></pre>
+<p>Vous devriez voir apparaître la lettre <code>A</code> en début de ligne indiquant que tout va bien. Le programme ne fait plus rien ensuite, vous pouvez donc arrêter QEMU (<code>Ctrl-A X</code>).</p>
+<h1 id="compréhension-du-code">Compréhension du code</h1>
+<p>Maintenant, vous allez essayer de comprendre les grandes lignes du code qui vous est donné.</p>
+<p>Voici le contenu du répertoire (classé dans l’ordre dans lequel je vous conseille de parcourir une première fois les fichiers) :</p>
+<ul>
+<li><code>Makefile</code> : le Makefile permettant de tout compiler efficacement</li>
+<li><code>crt0.s</code> : le code de mise en place de l’environnement d’exécution C</li>
+<li><code>init_bss.c</code> : quelques fonctions relatives à cette mise en place et qui peuvent être écrites en C</li>
+<li><code>main.c</code> : le fichier qui contient la fonction <code>main</code></li>
+<li><code>ld_ram.lds</code> : le script d’édition des liens</li>
+<li><code>irq.c</code> : gestion des interruptions</li>
+<li><code>irq.h</code> : gestion des interruptions (entêtes)</li>
+</ul>
+<p>En parcourant ces fichiers, vous allez aborder un certain nombre de concepts importants à comprendre avant d’aller plus loin :</p>
+<ul>
+<li>Étapes de la compilation (vu en INF104)</li>
+<li>Composition d’un exécutable (vu en INF104)</li>
+<li>Édition des liens (vu en INF104)</li>
+<li>Démarrage d’un exécutable et mise en place de l’environnement d’exécution C (nouveau)</li>
+<li>Communication avec un périphérique mappé en mémoire (nouveau)</li>
+<li>Démarrage d’un Cortex-M3 (nouveau)</li>
+</ul>
+<p>Prenez votre temps pour essayer de comprendre le code. N’hésitez pas à interagir longuement avec votre encadrant.</p>
+<p>Il faut en particulier répondre aux questions suivantes :</p>
+<ol type="1">
+<li>Quelles sont les différentes parties (<em>sections</em>) qui composent l’exécutable ? Que contiennent-elles ?</li>
+<li>À quelles adresses sont placées ces différentes sections au moment du chargement de l’image ?</li>
+<li>À quelles adresses ces sections se trouvent lors de l’exécution du code ?</li>
+<li>Que fait le code assembleur dans <code>crt0.s</code> ?</li>
+<li>En quoi consiste l’initialisation de la section BSS ?</li>
+<li>Pourquoi la section <code>data</code> est-elle recopiée ?</li>
+<li>Comment se passe le dialogue avec les périphériques (notamment l’UART) ?</li>
+<li>À quoi correspond la table <code>vector_table</code> définie dans <code>irq.c</code> ?</li>
+</ol>
+<p>Discutez avec votre encadrant avant d’aller plus loin, c’est-à-dire à la <a href="https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-3.html">page suivante</a>.</p>
+<hr>
+<p>© Copyright 2020 Guillaume Duc. Le contenu de cette page est
+  mis à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Licence
+  Creative Commons Attribution - Partage dans les Mêmes Conditions 4.0
+  International</a> (à l'exception des exemples de code tirés du noyau
+  Linux et qui sont distribués sous leurs licences d'origine).</p>
+
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Licence
+Creative Commons" style="border-width:0" src="Initialisation_fichiers/cc_by_sa.png"></a>
+
+
+</body></html>
