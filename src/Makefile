@@ -30,7 +30,7 @@ FOLDER_STDLIB = libc/
 OBJS_STDLIB = string.o sys.o
 
 FOLDER_SYSCALLS = syscalls/
-OBJS_SYSCALLS = syscalls.o
+OBJS_SYSCALLS = syscalls.o sys_stdio.o
 
 FOLDER_FILESYSTEM = filesystem/
 OBJS_FILESYSTEM = filesystem.o

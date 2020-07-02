@@ -38,6 +38,13 @@ typedef struct {
     void *r11;
 } context_soft;
 
+#define PROC_MAX_FD 16
+#define PROC_USED_FD (1 << 31)
+
+typedef struct {
+    int inode;
+    int cursor;
+} proc_file;
 
 // https://github.com/FreeRTOS/FreeRTOS-Kernel/blob/6199b72fbf57a7c5b3d7b195a3bd1446779314cd/tasks.c
 // tskTaskControlBlock
@@ -45,6 +52,7 @@ typedef struct {
     volatile void *sp;
     uint32_t flags;
     uint32_t pid;
+    proc_file fds[PROC_MAX_FD];
     void *stack_start;
     void *stack_end;
 } process_t;

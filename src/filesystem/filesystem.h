@@ -21,6 +21,7 @@ int fs_get_inode(char *name);
 int fs_create(char *name);
 uint32_t fs_append(int inode, char *txt, uint32_t size);
 uint32_t fs_truncate(int inode, uint32_t size);
+uint32_t fs_write(int inode, uint32_t off, char *buffer, uint32_t size);
 
 uint32_t fs_read(int inode, uint32_t off, char *buffer, uint32_t size);
 
@@ -31,5 +32,6 @@ int fs_copy(int inode, char *name);
 // at the start give a ptr to a file_view with num_inode = -1
 // returns NULL at the end
 file_view * fs_iter(file_view *f);
+file_view * fs_get_view(int inode, file_view *f);
 
 #endif

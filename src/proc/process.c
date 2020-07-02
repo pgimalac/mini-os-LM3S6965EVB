@@ -106,6 +106,10 @@ int new_task(task_func_t f, void *arg) {
     cts-> r10 = 0;
     cts-> r11 = 0;
 
+    for (int i = 0; i < PROC_MAX_FD; i++) {
+        proc->fds[i].inode = 0;
+    }
+
     proc->sp       = (void *) cts;
 
     proc->flags = PROCESS_FLAGS_EXISTS;

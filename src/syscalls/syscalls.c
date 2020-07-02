@@ -10,5 +10,12 @@ uint32_t sys_getpid() {
 void *syscalls[] = {
     sys_exit,
     sys_fork,
-    sys_getpid
+    sys_getpid,
+    sys_open,
+    sys_close,
+    sys_write,
+    sys_read,
+    sys_lseek,
+    sys_remove,
+    sys_move
 };

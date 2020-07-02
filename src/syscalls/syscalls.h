@@ -11,5 +11,13 @@ extern void *syscalls[];
 void sys_exit(int status);
 uint32_t sys_fork();
 uint32_t sys_getpid();
+int sys_open(char *name, int append);
+void sys_close(int fd);
+int sys_write(int fd, char *buff, int len);
+int sys_read(int fd, char *buff, int len);
+int sys_lseek(int fd, uint32_t pos, int whence);
+void sys_remove(char *name);
+void sys_move(char *name, char *newname);
+
 
 #endif

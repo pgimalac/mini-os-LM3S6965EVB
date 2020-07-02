@@ -76,6 +76,8 @@ uint32_t fs_append(int inode, char *txt, uint32_t size) {
         size = f->block_num * BLOCK_SIZE - f->size;
     }
 
+    uint32_t size_s = size;
+
     int current_block = (f->size + BLOCK_SIZE - 1) / BLOCK_SIZE;
     uint32_t diff = current_block * BLOCK_SIZE - f->size;
     if (diff > size) {
@@ -99,7 +101,7 @@ uint32_t fs_append(int inode, char *txt, uint32_t size) {
 
     }
 
-    return f->size;
+    return size_s;
 }
 
 uint32_t fs_truncate(int inode, uint32_t size) {
@@ -111,6 +113,16 @@ uint32_t fs_truncate(int inode, uint32_t size) {
 
     return f->size;
 }
+
+uint32_t fs_write(int inode, uint32_t off, char *buffer, uint32_t size) {
+    inode_t *f = &ilist[inode];
+    if (f->size > off) {
+        fs_truncate(inode, off);
+    }
+
+    return fs_append(inode, buffer, size);
+}
+
 
 void fs_remove(int inode) {
     inode_t *f = &ilist[inode];
@@ -176,6 +188,16 @@ file_view * fs_iter(file_view *f) {
     f->inode_num &= ~FS_INODE_USED;
 
     return f;
+}
+
+file_view * fs_get_view(int inode, file_view *v) {
+    inode_t *f = &ilist[inode];
+    if (!(f->inode_num & FS_INODE_USED)) {
+        return NULL;
+    }
+
+    memcpy(v, f, sizeof(file_view));
+    return v;
 }
 
 void restaure_fs_from_disk() {
