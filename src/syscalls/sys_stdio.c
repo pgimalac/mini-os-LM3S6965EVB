@@ -6,7 +6,10 @@
 int sys_open(char *name, int append) {
     int inode = fs_get_inode(name);
     if (inode == -1) {
-        return -1;
+        inode = fs_create(name);
+        if (inode == -1) {
+            return -1;
+        }
     }
 
     int fd;
@@ -34,7 +37,7 @@ void sys_close(int fd) {
 }
 
 int sys_write(int fd, char *buff, int len) {
-    uint32_t size = fs_write(current_proc->fds[fd].inode,
+    uint32_t size = fs_write(current_proc->fds[fd].inode & ~PROC_USED_FD,
                              current_proc->fds[fd].cursor,
                              buff, len);
     current_proc->fds[fd].cursor += size;
@@ -42,7 +45,7 @@ int sys_write(int fd, char *buff, int len) {
 }
 
 int sys_read(int fd, char *buff, int len) {
-    uint32_t size = fs_read(current_proc->fds[fd].inode,
+    uint32_t size = fs_read(current_proc->fds[fd].inode & ~PROC_USED_FD,
                             current_proc->fds[fd].cursor,
                             buff, len);
     current_proc->fds[fd].cursor += size;
@@ -52,7 +55,7 @@ int sys_read(int fd, char *buff, int len) {
 int sys_lseek(int fd, int pos, int whence) {
     proc_file *file = &current_proc->fds[fd];
     file_view view;
-    if (fs_get_view(file->inode, &view) == NULL) {
+    if (fs_get_view(file->inode & ~PROC_USED_FD, &view) == NULL) {
         close(fd);
         return -1;
     }

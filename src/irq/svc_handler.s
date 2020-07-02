@@ -23,13 +23,10 @@ sys_fork_save_sp:
 
 .thumb_func
 SVC_Handler:
-    cpsid i
+    cpsid i //cheating
     stmfd r13!, {r4-r5, r14}
 
-    tst lr, #4
-    ite eq
-    mrseq r4, msp
-    mrsne r4, psp
+    mrs r4, psp
 
     // *(*($r4+24)-2) & 0x000000ff
 
@@ -47,15 +44,12 @@ SVC_Handler:
     ldr r5, [r5]
     blx r5
 
-    tst lr, #4
-    ite eq
-    mrseq r4, msp
-    mrsne r4, psp
+    mrs r4, psp
 
     str r0, [r4]
 
     ldmia r13!, {r4-r5, r14}
 
-    cpsie i
+    cpsie i //cheating
 
     bx r14

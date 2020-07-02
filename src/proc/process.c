@@ -3,6 +3,7 @@
 #include "periphs/uart.h"
 #include "irq/icsr.h"
 #include "scheduler.h"
+#include "tasks.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -16,41 +17,6 @@ volatile uint8_t proc_stacks[PROC_MAX_NUM][STACK_SIZE];
 
 process_t *current_proc = NULL;
 process_t *next_proc = NULL;
-
-int task(void *arg) {
-    uart0_write("TASK_BEGIN\n");
-
-    uint32_t pid = getpid();
-    uart0_write("my pid is ");
-    uart0_write_int(pid);
-
-    // int ret = fork();
-    // if (ret == -1) {
-    //     uart0_write("returned -1\n");
-    // } else if (ret == 0) {
-    //     uart0_write("returned 0\n");
-    // } else {
-    //     uart0_write("returned >0\n");
-    //     uart0_write_int(ret);
-    // }
-
-    for (int j = 0; j < 50; j++) {
-        uart0_write(arg);
-        for (int i = 0; i <= 10000000; i++){}
-    }
-
-    return 0;
-}
-
-int init() {
-    new_task(task, "A");
-    new_task(task, "B");
-    new_task(task, "C");
-    new_task(task, "D");
-    new_task(task, "E");
-
-    while (1);
-}
 
 // contains the 'free' pids
 uint32_t free_pid[PROC_MAX_NUM];

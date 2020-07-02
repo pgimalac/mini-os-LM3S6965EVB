@@ -33,7 +33,7 @@ PendSV_Handler:
     ldr r2, [r2]
     str r2, [r3]
 
-    ldr pc, =0xFFFFFFFD
+    ldr r14, =0xFFFFFFFD
 
     bx r14
 
