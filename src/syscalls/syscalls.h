@@ -2,6 +2,7 @@
 #define SYSCALLS_H
 
 #include <stdint.h>
+#include "filesystem/filesystem.h"
 
 extern void *syscalls[];
 
@@ -18,6 +19,6 @@ int sys_read(int fd, char *buff, int len);
 int sys_lseek(int fd, uint32_t pos, int whence);
 void sys_remove(char *name);
 void sys_move(char *name, char *newname);
-
+file_view * sys_iter_files(file_view * view);
 
 #endif

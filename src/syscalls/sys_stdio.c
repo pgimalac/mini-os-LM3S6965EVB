@@ -93,3 +93,7 @@ void sys_move(char *name, char *newname) {
         fs_move(node, newname);
     }
 }
+
+file_view * sys_iter_files(file_view * view) {
+    return fs_iter(view);
+}

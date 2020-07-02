@@ -17,5 +17,7 @@ void *syscalls[] = {
     sys_read,
     sys_lseek,
     sys_remove,
-    sys_move
+    sys_move,
+    sys_iter_files
+
 };

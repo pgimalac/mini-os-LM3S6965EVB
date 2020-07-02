@@ -64,3 +64,9 @@ move:
     svc 9
     bx r14
 
+.global sys_iter_files
+.thumb_func
+sys_iter_files:
+    svc 10
+    bx r14
+

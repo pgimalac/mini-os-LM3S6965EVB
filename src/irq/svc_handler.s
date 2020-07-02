@@ -23,6 +23,7 @@ sys_fork_save_sp:
 
 .thumb_func
 SVC_Handler:
+    cpsid i
     stmfd r13!, {r4-r5, r14}
 
     tst lr, #4
@@ -54,5 +55,7 @@ SVC_Handler:
     str r0, [r4]
 
     ldmia r13!, {r4-r5, r14}
+
+    cpsie i
 
     bx r14
