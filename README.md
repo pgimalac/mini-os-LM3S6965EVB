@@ -23,7 +23,7 @@ Les processus sont en permanence avec des privilèges élevés.
 
 Rien n'a été optimisé globalement, l'efficacité de fonctionnement n'étant pas l'objectif.
 
-## Source
+## Documentation
 ### Liens originaux
 `https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-1.html`
 `https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-2.html`
@@ -31,4 +31,4 @@ Rien n'a été optimisé globalement, l'efficacité de fonctionnement n'étant p
 `https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-4.html`
 
 ### Copie
-Les pages ci-dessus ont été sauvegardées à la fin du projet et leur contenu est dans le dossier `source`.
+Les pages ci-dessus ont été sauvegardées à la fin du projet et leur contenu est dans le dossier `docs`.
