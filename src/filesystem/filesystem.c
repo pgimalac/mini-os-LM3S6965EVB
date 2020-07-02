@@ -50,7 +50,7 @@ int fs_create(char *name) {
             continue;
         }
 
-        memcpy(ilist[i].name, name, FS_FILE_NAME_LENGTH);
+        strcpy(ilist[i].name, name);
         ilist[i].inode_num |= FS_INODE_USED;
         ilist[i].size = 0;
         ilist[i].block_num = 0;
@@ -123,7 +123,7 @@ void fs_remove(int inode) {
 
 void fs_move(int inode, char *name) {
     inode_t *f = &ilist[inode];
-    memcpy(f->name, name, FS_FILE_NAME_LENGTH);
+    strcpy(f->name, name);
 }
 
 int fs_copy(int inode, char *name) {
@@ -133,12 +133,12 @@ int fs_copy(int inode, char *name) {
         return -1;
     }
 
-    uint32_t current_block = f->size / BLOCK_SIZE;
-    for (uint32_t i = 0; i <= current_block; i++) {
+    uint32_t block_num = (f->size + BLOCK_SIZE - 1) / BLOCK_SIZE;
+    for (uint32_t i = 0; i < block_num; i++) {
         fs_append(new, (char *)&blocks[f->addrs[i]], BLOCK_SIZE);
     }
 
-    return ilist[new].size;
+    return new;
 }
 
 uint32_t fs_read(int inode, uint32_t off, char *buffer, uint32_t size) {
@@ -173,6 +173,7 @@ file_view * fs_iter(file_view *f) {
     }
 
     memcpy(f, &ilist[inode], sizeof(file_view));
+    f->inode_num &= ~FS_INODE_USED;
 
     return f;
 }
@@ -181,7 +182,26 @@ void restaure_fs_from_disk() {
     fs_clear();
 
     // write calls to functions above to generate the "initial" disk state
-    fs_create("doc");
-    fs_create("doc");
-    fs_create("doc");
+    uint32_t doc      = fs_create("doc");
+    fs_append(doc, "some text", 13);
+
+    uint32_t img      = fs_create("img");
+    fs_append(img, "this is a very nice image", 25);
+
+    uint32_t music    = fs_create("music");
+    fs_copy(music, "music2");
+
+    uint32_t dev      = fs_create("dev");
+    fs_append(dev, "the dev repository contains peripherics", 39);
+    fs_append(dev, "such as tty0, stdout or usb", 27);
+
+    uint32_t tmp      = fs_create("tmp");
+    fs_append(tmp, "a lot of text just to fill the file", 35);
+    fs_truncate(tmp, 5);
+
+    uint32_t download = fs_create("download");
+    fs_move(download, "dl");
+
+    //done
+    return;
 }

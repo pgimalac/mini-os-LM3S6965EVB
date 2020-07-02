@@ -11,6 +11,17 @@ void *memmove(void *dest, const void *src, size_t n) {
     return dest;
 }
 
+char *strcpy(char *dest, const char *src) {
+    while (*src != 0) {
+        *dest++ = *src++;
+    }
+
+    *dest++ = 0;
+
+    return dest;
+}
+
+
 void *memcpy(void *dest, const void *src, size_t n) {
     while (n > 0) {
         *(uint8_t *)dest++ = *(uint8_t *)src++;
