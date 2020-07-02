@@ -35,9 +35,8 @@ int task1(void *arg) {
 
     while (1) {
         lseek(fd, 0, SEEK_SET);
-        int len = read(fd, buffer, BUFF_SIZE-2);
-        buffer[len] = '\n';
-        buffer[len+1] = 0;
+        int len = read(fd, buffer, BUFF_SIZE-1);
+        buffer[len] = 0;
 
         uart0_write("read\n");
         uart0_write(buffer);

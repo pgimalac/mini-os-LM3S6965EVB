@@ -227,6 +227,9 @@ void restaure_fs_from_disk() {
     uint32_t download = fs_create("download");
     fs_move(download, "dl");
 
+    uint32_t test = fs_create("test");
+    fs_append(test, "init", 4);
+
     //done
     return;
 }
