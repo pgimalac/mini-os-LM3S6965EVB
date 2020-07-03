@@ -8,7 +8,7 @@ OBJCOPY = $(CROSSCOMPILE)objcopy
 
 # Définition des flags de compilation pour le compilateur C et l'assembleur
 ARCH = -mcpu=cortex-m3 -mthumb
-CFLAGS  = -g -Wall -Wextra -Wall -O1 -I. -std=gnu99 $(ARCH)
+CFLAGS  = -g -Wall -Wextra -Wall -O0 -I. -std=gnu99 $(ARCH)
 ASFLAGS = -g -mcpu=cortex-m3
 LDFLAGS = $(ARCH) -nostdlib -T ld_ram.lds
 LDLIBS = -lgcc
@@ -24,7 +24,7 @@ FOLDER_IRQ = irq/
 OBJS_IRQ = irq.o handlers.o default_handlers.o icsr.o pendsv_handler.o svc_handler.o
 
 FOLDER_PROC = proc/
-OBJS_PROC = process.o scheduler.o
+OBJS_PROC = process.o scheduler.o tasks.o
 
 FOLDER_STDLIB = libc/
 OBJS_STDLIB = string.o sys.o

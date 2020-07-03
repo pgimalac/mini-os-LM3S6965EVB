@@ -40,7 +40,7 @@ PendSV_Handler:
     //orr r0, #1
     //msr CONTROL, r0
 
-    ldr pc, =0xFFFFFFFD
+    ldr r14, =0xFFFFFFFD
 
     bx r14
 

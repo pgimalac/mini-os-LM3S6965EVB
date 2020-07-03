@@ -9,9 +9,11 @@
 #define MAX_FILE_NUMBER 2048
 #define BLOCK_NUM 16384
 
-#define ilist ((inode_t *)RAM2_MIN_ADDR)
-#define blocks ((uint8_t *)(RAM2_MAX_ADDR - BLOCK_NUM * BLOCK_SIZE))
-#define bitset_blocks ((uint8_t *)(blocks - BLOCK_NUM / 8))
+// use real variables instead of define for gdb
+
+extern inode_t *ilist;
+extern uint8_t *blocks;
+extern uint8_t *bitset_blocks;
 
 void fs_init();
 void restaure_fs_from_disk();

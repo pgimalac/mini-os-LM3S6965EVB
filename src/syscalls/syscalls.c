@@ -19,5 +19,4 @@ void *syscalls[] = {
     sys_remove,
     sys_move,
     sys_iter_files
-
 };
