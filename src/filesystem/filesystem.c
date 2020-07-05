@@ -163,7 +163,7 @@ uint32_t fs_read(int inode, uint32_t off, char *buffer, uint32_t size) {
         return 0;
     }
 
-    if (f->size > off + size) {
+    if (off + size > f->size) {
         size = f->size - off;
     }
 

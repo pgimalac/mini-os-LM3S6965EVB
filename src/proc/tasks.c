@@ -23,7 +23,7 @@ int task2(void *arg) {
     }
 }
 
-#define BUFF_SIZE 1000
+#define BUFF_SIZE 700
 int task1(void *arg) {
     int fd = open((char *)arg, 0);
     if (fd == -1) {
@@ -76,7 +76,7 @@ int init() {
     // new_task(task, "C");
     // new_task(task, "D");
     // new_task(task, "E");
-    // new_task(task2, "test");
+    new_task(task2, "test");
     new_task(task1, "test");
 
     while (1);
