@@ -21,7 +21,6 @@ char *strcpy(char *dest, const char *src) {
     return dest;
 }
 
-
 void *memcpy(void *dest, const void *src, size_t n) {
     while (n > 0) {
         *(uint8_t *)dest++ = *(uint8_t *)src++;
@@ -30,7 +29,6 @@ void *memcpy(void *dest, const void *src, size_t n) {
 
     return dest;
 }
-
 
 void *memset(void *s, int c, size_t n) {
     while (n > 0) {

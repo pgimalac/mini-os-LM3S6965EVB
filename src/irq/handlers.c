@@ -4,11 +4,11 @@
 
 #include "handlers.h"
 #include "icsr.h"
+#include "irq.h"
+#include "periphs/systick.h"
 #include "periphs/uart.h"
 #include "proc/process.h"
-#include "irq.h"
 #include "proc/scheduler.h"
-#include "periphs/systick.h"
 
 void SysTick_Handler() {
     uart0_write("SysTick_Handler\n");

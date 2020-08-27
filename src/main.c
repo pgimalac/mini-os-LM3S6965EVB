@@ -1,5 +1,5 @@
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 #include "irq/irq.h"
 #include "periphs/systick.h"
@@ -17,7 +17,8 @@ int main() {
     init_proc_table();
     systick_init(0x6FFFFF);
 
-    while (1) {}
+    while (1) {
+    }
 
     return 0;
 }

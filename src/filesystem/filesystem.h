@@ -33,7 +33,7 @@ int fs_copy(int inode, char *name);
 
 // at the start give a ptr to a file_view with num_inode = -1
 // returns NULL at the end
-file_view * fs_iter(file_view *f);
-file_view * fs_get_view(int inode, file_view *f);
+file_view *fs_iter(file_view *f);
+file_view *fs_get_view(int inode, file_view *f);
 
 #endif

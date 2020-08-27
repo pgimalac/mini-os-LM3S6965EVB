@@ -4,7 +4,8 @@
 
 inode_t *ilist = (inode_t *)RAM2_MIN_ADDR;
 uint8_t *blocks = (uint8_t *)(RAM2_MAX_ADDR - BLOCK_NUM * BLOCK_SIZE);
-uint8_t *bitset_blocks = (uint8_t *)(RAM2_MAX_ADDR - BLOCK_NUM * BLOCK_SIZE - BLOCK_NUM / 8);
+uint8_t *bitset_blocks =
+    (uint8_t *)(RAM2_MAX_ADDR - BLOCK_NUM * BLOCK_SIZE - BLOCK_NUM / 8);
 
 void fs_init() {
     for (int i = 0; i < MAX_FILE_NUMBER; i++) {
@@ -36,9 +37,7 @@ int find_block() {
     return -1;
 }
 
-void free_block(int num) {
-    bitset_blocks[num / 8] &= ~(1 << (num % 8));
-}
+void free_block(int num) { bitset_blocks[num / 8] &= ~(1 << (num % 8)); }
 
 void fs_clear() {
     for (int i = 0; i < MAX_FILE_NUMBER; i++) {
@@ -67,7 +66,8 @@ int fs_create(char *name) {
 
 uint32_t fs_append(int inode, char *txt, uint32_t size) {
     inode_t *f = &ilist[inode];
-    while (f->block_num < FS_INODE_MAX_BLOCK && f->block_num * BLOCK_SIZE < f->size + size) {
+    while (f->block_num < FS_INODE_MAX_BLOCK &&
+           f->block_num * BLOCK_SIZE < f->size + size) {
         int bl = find_block();
         if (bl == -1)
             break;
@@ -88,7 +88,8 @@ uint32_t fs_append(int inode, char *txt, uint32_t size) {
         diff = size;
     }
 
-    memcpy(&blocks[f->addrs[num_block-1] * BLOCK_SIZE] + f->size % BLOCK_SIZE, txt, diff);
+    memcpy(&blocks[f->addrs[num_block - 1] * BLOCK_SIZE] + f->size % BLOCK_SIZE,
+           txt, diff);
     f->size += diff;
     size -= diff;
     txt += diff;
@@ -97,7 +98,7 @@ uint32_t fs_append(int inode, char *txt, uint32_t size) {
     while (size != 0) {
         diff = size < BLOCK_SIZE ? size : BLOCK_SIZE;
 
-        memcpy(&blocks[f->addrs[num_block-1] * BLOCK_SIZE], txt, diff);
+        memcpy(&blocks[f->addrs[num_block - 1] * BLOCK_SIZE], txt, diff);
         f->size += diff;
         txt += diff;
         size -= diff;
@@ -125,7 +126,6 @@ uint32_t fs_write(int inode, uint32_t off, char *buffer, uint32_t size) {
 
     return fs_append(inode, buffer, size);
 }
-
 
 void fs_remove(int inode) {
     inode_t *f = &ilist[inode];
@@ -168,18 +168,20 @@ uint32_t fs_read(int inode, uint32_t off, char *buffer, uint32_t size) {
     }
 
     for (uint32_t i = off; i < off + size; i++) {
-        buffer[0] = (&blocks[f->addrs[i / BLOCK_SIZE] * BLOCK_SIZE])[i % BLOCK_SIZE];
+        buffer[0] =
+            (&blocks[f->addrs[i / BLOCK_SIZE] * BLOCK_SIZE])[i % BLOCK_SIZE];
         buffer++;
     }
 
     return size;
 }
 
-file_view * fs_iter(file_view *f) {
+file_view *fs_iter(file_view *f) {
     uint32_t inode = f->inode_num & ~FS_INODE_USED;
     inode++;
 
-    while (inode < MAX_FILE_NUMBER && !(ilist[inode].inode_num & FS_INODE_USED)) {
+    while (inode < MAX_FILE_NUMBER &&
+           !(ilist[inode].inode_num & FS_INODE_USED)) {
         inode++;
     }
 
@@ -193,7 +195,7 @@ file_view * fs_iter(file_view *f) {
     return f;
 }
 
-file_view * fs_get_view(int inode, file_view *v) {
+file_view *fs_get_view(int inode, file_view *v) {
     inode_t *f = &ilist[inode];
     if (!(f->inode_num & FS_INODE_USED)) {
         return NULL;
@@ -207,20 +209,20 @@ void restaure_fs_from_disk() {
     fs_clear();
 
     // write calls to functions above to generate the "initial" disk state
-    uint32_t doc      = fs_create("doc");
+    uint32_t doc = fs_create("doc");
     fs_append(doc, "some text", 13);
 
-    uint32_t img      = fs_create("img");
+    uint32_t img = fs_create("img");
     fs_append(img, "this is a very nice image", 25);
 
-    uint32_t music    = fs_create("music");
+    uint32_t music = fs_create("music");
     fs_copy(music, "music2");
 
-    uint32_t dev      = fs_create("dev");
+    uint32_t dev = fs_create("dev");
     fs_append(dev, "the dev repository contains peripherics ", 40);
     fs_append(dev, "such as tty0, stdout or usb", 27);
 
-    uint32_t tmp      = fs_create("tmp");
+    uint32_t tmp = fs_create("tmp");
     fs_append(tmp, "a lot of text just to fill the file", 35);
     fs_truncate(tmp, 5);
 
@@ -230,6 +232,6 @@ void restaure_fs_from_disk() {
     uint32_t test = fs_create("test");
     fs_append(test, "init", 4);
 
-    //done
+    // done
     return;
 }

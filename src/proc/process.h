@@ -4,15 +4,15 @@
 #include <stdint.h>
 
 #ifndef PROC_MAX_NUM
-    #define PROC_MAX_NUM 16
+#define PROC_MAX_NUM 16
 #endif
 
 // STACK_SIZE is the number of bytes in the stack of one process
 #ifndef STACK_SIZE
-    #define STACK_SIZE 1024
+#define STACK_SIZE 1024
 #endif
 
-#define PROCESS_FLAGS_EXISTS   1
+#define PROCESS_FLAGS_EXISTS 1
 
 typedef int (*task_func_t)(void *);
 

@@ -8,9 +8,9 @@
 // http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dai0179b/ar01s02s08.html
 // https://developer.arm.com/docs/ddi0337/e/nested-vectored-interrupt-controller/nvic-programmers-model/nvic-register-descriptions
 
-#define SYSTICK_CTRL_ADDR (*(volatile uint32_t *) 0xE000E010)
-#define SYSTICK_RELOAD_ADDR (*(volatile uint32_t *) 0xE000E014)
-#define SYSTICK_CURRENT_ADDR (*(volatile uint32_t *) 0xE000E018)
+#define SYSTICK_CTRL_ADDR (*(volatile uint32_t *)0xE000E010)
+#define SYSTICK_RELOAD_ADDR (*(volatile uint32_t *)0xE000E014)
+#define SYSTICK_CURRENT_ADDR (*(volatile uint32_t *)0xE000E018)
 
 #define SYSTICK_CTRL_MASK (((uint32_t)-1) << 3)
 #define SYSTICK_CTRL_ENABLE (1 << 0)

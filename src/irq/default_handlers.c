@@ -2,12 +2,14 @@
 #include "irq/irq.h"
 #include "periphs/uart.h"
 
-#define MAKE_DEFAULT_HANDLER(x) void __attribute__((weak)) x(void) {  \
-    disable_irq();                                                    \
-    uart0_write(#x);                                                  \
-    uart0_write(" default\n");                                        \
-    while(1);                                                         \
-}
+#define MAKE_DEFAULT_HANDLER(x)                                                \
+    void __attribute__((weak)) x(void) {                                       \
+        disable_irq();                                                         \
+        uart0_write(#x);                                                       \
+        uart0_write(" default\n");                                             \
+        while (1)                                                              \
+            ;                                                                  \
+    }
 
 MAKE_DEFAULT_HANDLER(NMI_Handler)
 MAKE_DEFAULT_HANDLER(HardFault_Handler)
