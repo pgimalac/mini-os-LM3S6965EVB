@@ -1,34 +1,31 @@
-# Projet PAF mini-os
+# mini-os LM3S6965EVB
 ## Informations
-Ce projet a été réalisé en projet de fin de première année (PAF) à Télécom Paris.
+This project was realised as a two week long end of the (first) year project at Telecom Paris.
 
-Le projet était encadré par Guillaume Duc.
+It was supervised by Guillaume Duc.
 
-## Projet
-Le principe du projet est d'écrire un OS (minimal) sur un Luminary Micro Stellaris LM3S6965EVB équipé d'un processeur ARM Cortex-M3.
+## Project
+The objective of the project was to write a minimalistic OS on a Luminary Micro Stellaris LM3S6965EVB equipped with a ARM Cortex-M3 processor.
 
-## Dépendances
-Le projet utilise Qemu pour se lancer. Au début du projet il s'agissait de la version QEMU System ARM officielle. Une fois le système de fichier commencé, une version modifiée de QEMU a été utilisée, une zone de RAM a été ajoutée entre les adresses `0xF0000000` et `0xF0A00000`. Il faut pour cela modifier le fichier `hw/arm/stellaris.c`, puis recompiler QEMU et le réinstaller.
+There wasn't a list of things to do and it was the first year such a project was attempted so it was a little bit improvised over the two weeks.
 
-La chaîne GCC pour arm-none-eabi est utilisée pour compiler et déboguer le projet.
+## Dependencies
+The project uses Qemu (as it occurred during a lock-down and the chip wasn't available for testing) to launch.
 
-## État final
-A la fin du projet le changement de contexte et la gestion des processus fonctionnaient.
+At first the official QEMU System ARM version was used, but to implement a small file system some RAM was added between the addresses `0xF0000000` and `0xF0A00000`. To do so you must modify the file [`hw/arm/stellaris.c`](https://github.com/qemu/qemu/blob/master/hw/arm/stellaris.c) in the [QEMU repository](https://github.com/qemu/qemu), then compile and install.
 
-Les appels système ont l'air de fonctionner plutot bien dans la globalité mais aucun test intensif n'a été réalisé. L'appel système fork ne fonctionne pas.
+The GCC arm-none-eabi tool chain was used to compile and debug the project.
 
-Le système de fichier n'a presque pas été testé et est donc probablement rempli de bugs, mais le peu que j'ai essayé ne fonctionnait pas trop mal.
+## Final state
+By the end of the project the processus handling and sequencing were working fine.
 
-Les processus sont en permanence avec des privilèges élevés.
+System calls work rather fine but no intensive test was made. `fork` doesn't work.
 
-Rien n'a été optimisé globalement, l'efficacité de fonctionnement n'étant pas l'objectif.
+The file system was almost not tested and thus may be filled with bugs but it seemed to work fine in the few tests realised.
 
-## Documentation
-### Liens originaux
-`https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-1.html`
-`https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-2.html`
-`https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-3.html`
-`https://perso.telecom-paristech.fr/duc/cours/paf/mini-os/mini-os-4.html`
+Processes are constantly with high priviledges.
 
-### Copie
-Les pages ci-dessus ont été sauvegardées à la fin du projet et leur contenu est dans le dossier `docs`.
+Nothing was optimised, as speed was not the objective of the project.
+
+## Significant issue
+A small part of memory seemed to take longer to access, causing one process (the one that had its RAM in this region) to be slower. No explanation was found.
